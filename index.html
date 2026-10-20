@@ -1,65 +1,39 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>ATELIER AI — Tu estilo, tus reglas</title>
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>ATELIER AI | Tu estilo. Tus reglas.</title>
 <style>
-:root{color-scheme:dark;--bg:#101010;--panel:#1d1d1d;--gold:#c9aa77;--muted:#b4b0a9}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:#f8f5ef;font-family:Arial,Helvetica,sans-serif}header{padding:23px 6%;border-bottom:1px solid #36312b;display:flex;justify-content:space-between;align-items:center;gap:12px}.logo{font-family:Georgia,serif;font-size:clamp(20px,4vw,29px);letter-spacing:2px}.gold{color:var(--gold)}.eyebrow{font-size:11px;letter-spacing:2px;color:var(--gold)}main{max-width:1000px;margin:auto;padding:20px 5%}.hero{text-align:center;padding:40px 5% 24px}.hero h1{font-family:Georgia,serif;font-weight:normal;font-size:clamp(42px,8vw,72px);margin:15px 0}.hero p,.muted{color:var(--muted);line-height:1.6}.panel{background:var(--panel);border:1px solid #41382d;border-radius:16px;padding:clamp(18px,4vw,30px);margin:22px 0}h2{font-family:Georgia,serif;font-weight:normal;font-size:29px}label{display:block;margin:20px 0 8px;color:#dfd2bd}select,input,textarea{width:100%;border:1px solid #504b44;border-radius:8px;background:#111;color:white;padding:14px;font:inherit}textarea{min-height:110px;resize:vertical}button{border:0;border-radius:8px;background:var(--gold);color:#111;font-weight:bold;padding:15px;cursor:pointer}.primary{width:100%;margin-top:22px}.result{display:none}.result.show{display:block}.outfit{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:20px 0}.item{border:1px solid #514638;border-radius:12px;background:#272420;padding:20px 8px;text-align:center}.item .emoji{display:block;font-size:50px;margin-bottom:10px}.products{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}.product{border:1px solid #4b443a;border-radius:10px;padding:17px;background:#242424}.product h3{margin-top:0}.price,.total{color:var(--gold);font-weight:bold}.price{font-size:23px}.total{font-size:32px}.notice{color:#b8b4ad;font-size:13px;line-height:1.6}.error{color:#ffb4a8}footer{text-align:center;color:#888;padding:35px;border-top:1px solid #333}@media(max-width:420px){.outfit{grid-template-columns:1fr 1fr}.item .emoji{font-size:38px}}
-</style>
-</head>
-<body>
-<header><div class="logo">ATELIER <span class="gold">AI</span></div><div class="eyebrow">ESTILO INTELIGENTE</div></header>
-<main>
-<section class="hero"><div class="eyebrow">PERSONAL STYLING</div><h1>Tu estilo.<br><span class="gold">Tus reglas.</span></h1><p>Combina prendas según tus gustos y tu presupuesto. Sin recomendaciones que contradigan tus instrucciones.</p></section>
-<section class="panel"><h2>Crea tu outfit</h2>
-<label for="style">Estilo</label><select id="style"><option>Old Money</option><option>Elegante</option><option>Casual</option><option>Urbano</option><option>Formal</option></select>
-<label for="budget">Presupuesto máximo (MXN)</label><input id="budget" type="number" min="1" value="2500">
-<label for="description">Prendas y restricciones</label><textarea id="description">Pantalón negro, camisa blanca, zapatos negros. Sin saco.</textarea>
-<button class="primary" id="generate">✦ GENERAR MI OUTFIT</button><p class="notice">Prototipo: usa un catálogo pequeño de ejemplo. Todavía no incluye inteligencia artificial ni imágenes generadas.</p></section>
-<section class="panel result" id="result" aria-live="polite"><div class="eyebrow">TU OUTFIT</div><h2 id="resultTitle"></h2><p id="message" class="muted"></p><div id="outfit" class="outfit"></div><h2>Prendas seleccionadas</h2><div id="products" class="products"></div><p>Total estimado</p><div id="total" class="total"></div><p id="budgetStatus"></p><p class="notice">Precios ficticios de demostración. No hay enlaces comerciales ni disponibilidad verificada.</p></section>
+:root{color-scheme:dark;--bg:#101010;--panel:#1c1c1c;--gold:#d0b383;--muted:#b6b1a8}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:#f7f5f0;font-family:Arial,Helvetica,sans-serif}header{border-bottom:1px solid #34302a;padding:21px 5%;display:flex;justify-content:space-between;align-items:center}.logo{font:26px Georgia,serif;letter-spacing:2px}.gold{color:var(--gold)}.sub{font-size:11px;letter-spacing:2px;color:var(--muted)}main{max-width:1150px;margin:auto;padding:24px 5%}h1,h2{font-family:Georgia,serif;font-weight:normal}h1{font-size:clamp(37px,6vw,65px);margin:12px 0}h2{font-size:30px}.intro{text-align:center;padding:35px 0}.intro p{color:var(--muted);line-height:1.6}.panel{background:var(--panel);border:1px solid #39342c;border-radius:16px;padding:23px;margin:22px 0}label{display:block;margin:17px 0 7px;color:#e0d4c3}textarea,input,select{width:100%;border:1px solid #514c44;border-radius:9px;padding:14px;background:#101010;color:white;font:inherit}textarea{min-height:95px}button{background:var(--gold);color:#16130e;padding:15px;border:0;border-radius:9px;font-weight:700;cursor:pointer}button.primary{width:100%;margin-top:20px}.result{display:none}.result.visible{display:block}.layout{display:grid;grid-template-columns:1.05fr 1fr;gap:24px}.photo{width:100%;height:460px;object-fit:cover;border-radius:12px;background:#272727}.photo-note,.fine{font-size:12px;color:var(--muted);line-height:1.6}.items{display:grid;gap:12px}.item{display:flex;gap:15px;background:#292929;padding:12px;border-radius:11px;align-items:center}.item img{width:95px;height:110px;object-fit:cover;border-radius:7px;background:#eee}.item h3{margin:0 0 9px;font-size:16px}.price{color:var(--gold);font-weight:bold}.total{font-size:27px;color:var(--gold);font-weight:bold}.status{margin-top:7px}.ok{color:#9cdda7}.bad{color:#f4ac9f}.error{color:#f4ac9f}.pill{color:var(--gold);font-size:12px;letter-spacing:1px}footer{text-align:center;color:#777;padding:40px;border-top:1px solid #333;margin-top:35px}@media(max-width:700px){.layout{grid-template-columns:1fr}.photo{height:420px}.logo{font-size:21px}.sub{font-size:9px}}
+</style></head><body>
+<header><div class="logo">ATELIER <span class="gold">AI</span></div><div class="sub">ESTILO INTELIGENTE</div></header>
+<main><section class="intro"><div class="sub gold">PERSONAL STYLING</div><h1>Tu estilo.<br><span class="gold">Tus reglas.</span></h1><p>Combina prendas de acuerdo con tus preferencias y tu presupuesto.</p></section>
+<section class="panel"><h2>Diseña tu outfit</h2><label for="style">Estilo</label><select id="style"><option>Old Money</option><option>Elegante</option><option>Casual</option><option>Formal</option></select><label for="budget">Presupuesto máximo (MXN)</label><input id="budget" type="number" min="1" value="2500"><label for="description">Prendas y restricciones</label><textarea id="description">Pantalón negro, camisa blanca, zapatos negros. Sin saco.</textarea><button class="primary" id="generate">✦ VER MI OUTFIT</button><p class="fine">Versión de prueba: solo reconoce las combinaciones del catálogo. No usa inteligencia artificial todavía.</p></section>
+<section class="panel result" id="result" aria-live="polite"><div class="pill">TU SELECCIÓN</div><h2 id="result-title"></h2><div class="layout"><div><img class="photo" id="outfit-photo" alt="Fotografía ilustrativa de un conjunto elegante"><p class="photo-note">Fotografía de referencia estética. No representa exactamente los productos mostrados.</p></div><div><h2>Prendas del outfit</h2><div class="items" id="items"></div><p>Total estimado</p><div class="total" id="total"></div><p class="status" id="status"></p><p class="fine">Productos y precios de demostración. Aún no hay enlaces de compra verificados.</p></div></div></section>
 </main><footer>ATELIER AI © 2026 · Tu estilo. Tus reglas.</footer>
 <script>
-const catalog=[
-{name:'Camisa blanca',type:'camisa',color:'blanco',price:499,icon:'👔'},
-{name:'Camisa negra',type:'camisa',color:'negro',price:499,icon:'👔'},
-{name:'Pantalón negro',type:'pantalon',color:'negro',price:699,icon:'👖'},
-{name:'Pantalón beige',type:'pantalon',color:'beige',price:699,icon:'👖'},
-{name:'Zapatos negros',type:'zapatos',color:'negro',price:799,icon:'👞'},
-{name:'Zapatos cafés',type:'zapatos',color:'cafe',price:799,icon:'👞'}
+const products=[
+{type:'camisa',color:'blanca',name:'Camisa blanca',price:499,image:'https://images.unsplash.com/photo-1598032895397-b9472444bf93?auto=format&fit=crop&w=400&q=80'},
+{type:'camisa',color:'negra',name:'Camisa negra',price:499,image:'https://images.unsplash.com/photo-1617127365659-c47fa864d8bc?auto=format&fit=crop&w=400&q=80'},
+{type:'pantalon',color:'negro',name:'Pantalón negro',price:699,image:'https://images.unsplash.com/photo-1473966968600-fa801b869a1a?auto=format&fit=crop&w=400&q=80'},
+{type:'pantalon',color:'beige',name:'Pantalón beige',price:699,image:'https://images.unsplash.com/photo-1473966968600-fa801b869a1a?auto=format&fit=crop&w=400&q=80'},
+{type:'zapatos',color:'negros',name:'Zapatos negros',price:799,image:'https://images.unsplash.com/photo-1614252235316-8c857d38b5f4?auto=format&fit=crop&w=400&q=80'},
+{type:'zapatos',color:'cafes',name:'Zapatos cafés',price:799,image:'https://images.unsplash.com/photo-1614252235316-8c857d38b5f4?auto=format&fit=crop&w=400&q=80'}
 ];
 const normalize=s=>s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
 function generate(){
- const budget=Number(document.getElementById('budget').value);
- const description=normalize(document.getElementById('description').value);
- if(!description.trim()||!Number.isFinite(budget)||budget<=0){alert('Escribe tus prendas y un presupuesto válido.');return;}
- const result=document.getElementById('result');result.classList.add('show');
- document.getElementById('resultTitle').textContent='Outfit '+document.getElementById('style').value;
- const requirements=[
- {type:'camisa',regex:/\bcamisa\s+(blanca|negra)\b/g,colors:{blanca:'blanco',negra:'negro'}},
- {type:'pantalon',regex:/\bpantalon\s+(negro|beige)\b/g,colors:{negro:'negro',beige:'beige'}},
- {type:'zapatos',regex:/\bzapatos?\s+(negros|cafes)\b/g,colors:{negros:'negro',cafes:'cafe'}}
- ];
+ const desc=normalize(document.getElementById('description').value),budget=Number(document.getElementById('budget').value),style=document.getElementById('style').value;
+ if(!desc.trim()||!Number.isFinite(budget)||budget<=0){alert('Escribe las prendas y un presupuesto válido.');return;}
+ const specs=[['camisa',/camisa\s+(blanca|negra)/],['pantalon',/pantalon\s+(negro|beige)/],['zapatos',/zapatos?\s+(negros|cafes)/]];
  const selected=[];const missing=[];
- for(const req of requirements){
-  const matches=[...description.matchAll(req.regex)].filter(m=>!/(?:sin|no quiero|evitar)\s*$/.test(description.slice(Math.max(0,m.index-15),m.index)));
-  if(matches.length!==1){missing.push(req.type);continue;}
-  const color=req.colors[matches[0][1]];
-  const product=catalog.find(p=>p.type===req.type&&p.color===color);
-  if(product)selected.push(product);else missing.push(req.type);
- }
- const unsupported=/(?:\bsaco\b|\bblazer\b)/.test(description)&&!/(?:sin|no quiero|evitar)\s+(?:un\s+)?(?:saco|blazer)/.test(description);
+ for(const [type,regex] of specs){const m=desc.match(regex);if(!m){missing.push(type);continue;}const product=products.find(p=>p.type===type&&normalize(p.color)===m[1]);if(product)selected.push(product);else missing.push(type);}
+ if(missing.length){alert('Esta demostración necesita que indiques camisa blanca o negra, pantalón negro o beige y zapatos negros o cafés. No sustituiremos tus instrucciones sin permiso.');return;}
+ if(/\b(saco|blazer|chaqueta|vestido|falda|tenis|shorts)\b/.test(desc)&&!/\b(sin|no quiero|evitar)\s+(saco|blazer|chaqueta|vestido|falda|tenis|shorts)/.test(desc)){alert('Esa prenda todavía no está disponible en nuestro catálogo de prueba.');return;}
  const total=selected.reduce((sum,p)=>sum+p.price,0);
- document.getElementById('outfit').innerHTML=selected.map(p=>`<div class="item"><span class="emoji">${p.icon}</span>${p.name}</div>`).join('');
- document.getElementById('products').innerHTML=selected.map(p=>`<div class="product"><h3>${p.name}</h3><div class="price">$${p.price.toLocaleString('es-MX')} MXN</div><p class="notice">Producto de demostración</p></div>`).join('');
+ document.getElementById('result-title').textContent='Outfit '+style;
+ document.getElementById('items').replaceChildren();
+ for(const p of selected){const card=document.createElement('div');card.className='item';const img=document.createElement('img');img.src=p.image;img.alt='Fotografía ilustrativa: '+p.name;img.loading='lazy';const info=document.createElement('div');const title=document.createElement('h3');title.textContent=p.name;const price=document.createElement('div');price.className='price';price.textContent='$'+p.price.toLocaleString('es-MX')+' MXN';info.append(title,price);card.append(img,info);document.getElementById('items').append(card);}
  document.getElementById('total').textContent='$'+total.toLocaleString('es-MX')+' MXN';
- const complete=missing.length===0&&!unsupported;
- document.getElementById('message').textContent=complete?'Combinación de ejemplo basada en las prendas que pediste. No se agregó saco.':'No puedo completar exactamente tu solicitud con este catálogo de prueba. Especifica camisa, pantalón y zapatos con colores disponibles (blanco/negro, negro/beige, negro/café).';
- const status=document.getElementById('budgetStatus');
- status.textContent=!complete?'⚠ Outfit incompleto: el total no representa el conjunto solicitado.':total<=budget?'✓ Dentro de tu presupuesto':'✕ Supera tu presupuesto por $'+(total-budget).toLocaleString('es-MX')+' MXN';
- status.className=complete&&total<=budget?'gold':'error';
- result.scrollIntoView({behavior:'smooth',block:'start'});
+ const status=document.getElementById('status');status.className='status '+(total<=budget?'ok':'bad');status.textContent=total<=budget?'✓ Dentro de tu presupuesto':'✕ Supera tu presupuesto por $'+(total-budget).toLocaleString('es-MX')+' MXN';
+ const photo=document.getElementById('outfit-photo');photo.src='https://images.unsplash.com/photo-1617127365659-c47fa864d8bc?auto=format&fit=crop&w=1100&q=85';
+ document.getElementById('result').classList.add('visible');document.getElementById('result').scrollIntoView({behavior:'smooth'});
 }
 document.getElementById('generate').addEventListener('click',generate);
-</script>
-</body></html>
+</script></body></html>
