@@ -679,19 +679,17 @@ function match(s,p){
     /\bmanga larga\b/
   ];
 
-  for(const regla of requisitos){
-    if(regla.test(detalles) && !regla.test(nombre)){
-      return null;
-    }
-  }
+  const detallesSinVerificar = requisitos.some(
+    regla => regla.test(detalles) && !regla.test(nombre)
+  );
 
   // El catálogo no verifica todos los detalles.
   // Si se pidieron detalles adicionales se indica
   // que la coincidencia necesita revisión.
   return {
-    nivel:valorIndefinido(s.detalles)
-      ? 'coincidencia de tipo, color y corte'
-      : 'coincidencia parcial: revisar detalles'
+    nivel:detallesSinVerificar || !valorIndefinido(s.detalles)
+      ? 'coincidencia parcial: verificar detalles en tienda'
+      : 'coincidencia de tipo, color y corte'
   };
 }
 
