@@ -1048,7 +1048,8 @@ async function create(){
 
   try{
     const respuesta=await askAI(text,'crear');
-
+    alert(JSON.stringify(respuesta.prendas, null, 2));
+    
     if(!Array.isArray(respuesta.prendas)){
       throw new Error('La IA no devolvió una lista de prendas.');
     }
