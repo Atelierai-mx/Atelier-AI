@@ -630,8 +630,24 @@ function match(s,p){
     return null;
   }
 
-  const color = normalize(s.color);
-  const colorProducto = normalize(p.color);
+const normalizarColor = valor => {
+  const c = normalize(valor);
+  const colores = {
+    blanca: 'blanco',
+    blancas: 'blanco',
+    blancos: 'blanco',
+    negra: 'negro',
+    negras: 'negro',
+    negros: 'negro',
+    azules: 'azul',
+    grises: 'gris',
+    verdes: 'verde'
+  };
+  return colores[c] || c;
+};
+
+const color = normalizarColor(s.color);
+const colorProducto = normalizarColor(p.color);
 
   if(
     !valorIndefinido(s.color) &&
