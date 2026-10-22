@@ -1,4 +1,127 @@
-/* ATELIER AI 7.1
+<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>ATELIER AI 7.0 | Tu estilo, tus reglas</title><style>
+:root{--bg:#111215;--card:#1d1e22;--line:#393a3e;--gold:#ddbe74;--txt:#f7f1e7;--muted:#b8b6b0}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--txt);font:15px/1.55 system-ui,Segoe UI,sans-serif}header{padding:24px max(22px,calc((100vw - 1180px)/2));border-bottom:1px solid var(--line);display:flex;justify-content:space-between;gap:12px}h1,h2,h3{font-family:Georgia,serif;font-weight:normal;margin:0}h1{letter-spacing:3px}h1 span,.gold{color:var(--gold)}h2{font-size:clamp(25px,4vw,38px)}h3{font-size:21px}.eyebrow{letter-spacing:2px;color:var(--gold);font-size:11px}main{max-width:1180px;margin:auto;padding:32px 20px 80px}p{margin:9px 0}.muted,.foot{color:var(--muted)}.panel,.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:21px}.panel{margin:20px 0}label{display:block;font-weight:650;margin:12px 0 6px}textarea,input{background:#121316;color:var(--txt);border:1px solid #55565b;padding:13px;border-radius:9px;width:100%;font:inherit}textarea{min-height:104px;resize:vertical}.formrow{display:grid;grid-template-columns:1fr 180px;gap:12px;align-items:end}button,.button{padding:12px 15px;border-radius:9px;background:var(--gold);border:1px solid var(--gold);font:inherit;font-weight:700;color:#141414;cursor:pointer;text-decoration:none;display:inline-block;text-align:center}button.alt,.button.alt{background:transparent;color:var(--gold)}button:disabled{opacity:.55;cursor:not-allowed}.small{font-size:12px;padding:9px 11px}.status{padding:13px 16px;background:#2c281e;border-left:3px solid var(--gold);border-radius:7px;margin:16px 0}.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin:19px 0}.card{padding:0;overflow:hidden}.photo{height:255px;background:#292b30;display:flex;align-items:center;justify-content:center;text-align:center;color:var(--muted);padding:15px}.photo img{width:100%;height:100%;object-fit:contain;background:#eee}.body{padding:18px}.tag{font-size:12px;color:#d4c6a5}.price{color:var(--gold);font:26px Georgia;margin:9px 0}.buttons{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.tip{font-size:12px;color:var(--muted)}.alternative{padding:10px;border:1px solid #45464a;border-radius:9px;margin-top:8px;font-size:13px}.alternative a{color:var(--gold)}.summary{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}.total{font:31px Georgia;color:var(--gold)}.hidden{display:none!important}.foot{border-top:1px solid var(--line);padding-top:20px;font-size:12px;margin-top:36px}.good{color:#b4e4b8}.warn{color:#ffd093}@media(max-width:800px){.grid{grid-template-columns:1fr 1fr}}@media(max-width:580px){.grid,.formrow{grid-template-columns:1fr}.photo{height:215px}header{padding:20px}header .eyebrow{max-width:115px;text-align:right}}
+</style></head><body><header><h1>ATELIER <span>AI</span></h1><div class="eyebrow">TU ESTILISTA DIGITAL · V7.0</div></header><main><div class="eyebrow">TU ESTILO · TUS REGLAS</div><h2>Descríbelo con tus palabras.</h2><p class="muted">Gemini interpreta tipos de prendas, colores, materiales y cambios. Nuestro catálogo solo muestra productos cuando hay coincidencia verificable.</p><section class="panel"><label for="prompt">¿Qué outfit quieres?</label><textarea id="prompt">Quiero un outfit old money con camisa blanca, pantalón negro de vestir y mocasines negros. Sin saco.</textarea><div class="formrow"><div><label for="budget">Presupuesto total (MXN)</label><input id="budget" type="number" min="1" step="1" value="2500"></div><button id="search">Buscar outfit</button></div><p class="tip">El presupuesto se indica aquí, no en el texto libre. Los precios de las fichas son referencias, no se actualizan en tiempo real.</p></section><section class="panel"><div class="summary"><div><div class="eyebrow">TU SELECCIÓN</div><h2>Tu outfit</h2></div><button id="undo" class="alt small" disabled>↶ Deshacer</button></div><div id="status" class="status" role="status" aria-live="polite">Escribe tu outfit y presiona Buscar outfit.</div><div id="cards" class="grid"></div><div class="summary" style="margin-top:18px"><div><div class="muted">Total confirmado del catálogo</div><div id="total" class="total">—</div><div id="budgetState" class="tip"></div></div><button id="editAll" class="alt" disabled>Modificar outfit completo</button></div><div id="editbox" class="panel hidden" style="border-color:var(--gold)"><h3 id="editTitle">Modificar prenda</h3><label for="editText">¿Qué quieres cambiar?</label><textarea id="editText" placeholder="Ejemplo: que esta camisa sea una polo azul marino; conserva el resto"></textarea><div class="buttons"><button id="apply">Aplicar cambio</button><button id="cancel" class="alt">Cancelar</button></div><p class="tip">Solo se modifica la prenda que elegiste. Si no tenemos un producto exacto, podrás buscarlo en tiendas.</p></div></section><div class="foot">ATELIER AI 7.0 · Interpretación mediante Gemini y Cloudflare. Catálogo limitado con fichas de H&M, Zara y Mango de versiones anteriores; enlaces, precios y fotografías pueden haber cambiado. Los resultados externos son búsquedas, no productos verificados por ATELIER. No se inventan productos, disponibilidad ni precios.</div></main><script>
+'use strict';
+const catalog=[
+{id:'shirt1',type:'camisa',color:'blanco',fit:'slim',name:'Camisa blanca Slim Fit Easy-iron',store:'H&M México',price:399,url:'https://www2.hm.com/es_mx/productpage.1242812001.html',img:'https://image.hm.com/assets/hm/48/68/4868ce1d20d8d2599872b50514e15c06fd6d2cba.jpg?imwidth=820'},
+{id:'shirt2',type:'camisa',color:'blanco',fit:'slim',name:'Camisa blanca Slim Fit de algodón',store:'H&M México',price:599,url:'https://www2.hm.com/es_mx/productpage.1297891001.html',img:''},
+{id:'pants1',type:'pantalon',color:'negro',fit:'slim',name:'Pantalón negro de traje Slim Fit',store:'H&M México',price:699,url:'https://www2.hm.com/es_mx/productpage.1252892001.html',img:'https://image.hm.com/assets/hm/1f/9f/1f9f3513cacc0813bb799b540a93738e7f2729dc.jpg?imwidth=820'},
+{id:'pants2',type:'pantalon',color:'negro',fit:'holgado',name:'Pantalón negro de vestir Loose Fit',store:'H&M México',price:999,url:'https://www2.hm.com/es_mx/productpage.1281852004.html',img:''},
+{id:'shoes1',type:'zapatos',color:'negro',fit:'mocasines',name:'Mocasines negros',store:'H&M México',price:749,url:'https://www2.hm.com/es_mx/productpage.1296994001.html',img:'https://image.hm.com/assets/hm/b1/dd/b1dd865dd91a3e49ed94aeb1b0f15da883f37e39.jpg?imwidth=820'},
+{id:'shoes2',type:'zapatos',color:'negro',fit:'mocasines',name:'Mocasines negros con costura',store:'H&M México',price:749,url:'https://www2.hm.com/es_mx/productpage.1265702003.html',img:''},
+{id:'shoes3',type:'zapatos',color:'negro',fit:'mocasines',name:'Mocasines negros de piel',store:'H&M México',price:769,url:'https://www2.hm.com/es_mx/productpage.1291325001.html',img:''}
+,{id:'zshirt1',type:'camisa',color:'blanco',fit:'slim',name:'Camisa slim fit blanca',store:'Zara México',price:849,url:'https://www.zara.com/mx/es/camisa-elastica-p04408147.html',img:''}
+,{id:'zshirt2',type:'camisa',color:'blanco',fit:'holgado',name:'Camisa relaxed fit fluida blanco roto',store:'Zara México',price:699,url:'https://www.zara.com/mx/es/camisa-relaxed-fit-fluida-p07545515.html',img:''}
+,{id:'mshirt1',type:'camisa',color:'blanco',fit:'slim',name:'Camisa 100% algodón non-iron slim fit',store:'Mango México',price:1999,url:'https://shop.mango.com/mx/es/p/hombre/camisas/lisas/camisa-100-algodon-non-iron-slim-fit/37076322/01/00',img:''}
+,{id:'mshirt2',type:'camisa',color:'blanco',fit:'slim',name:'Camisa de traje super slim fit',store:'Mango México',price:1599,url:'https://shop.mango.com/mx/es/p/hombre/camisas/slim-fit/camisa-traje-mezcla-algodon-super-slim-fit/27051252/01/00',img:''}
+,{id:'mshirt3',type:'camisa',color:'blanco',fit:'holgado',name:'Camisa de traje regular fit 100% algodón',store:'Mango México',price:1599,url:'https://shop.mango.com/mx/es/p/hombre/camisas/lisas/camisa-traje-100-algodon-regular-fit/37051398/01/00',img:''}
+,{id:'zpants1',type:'pantalon',color:'negro',fit:'holgado',name:'Pantalón de traje smoking de lana regular fit',store:'Zara México',price:319,url:'https://www.zara.com/mx/es/pantalon-traje-smoking-lana-aaron-levine-x-zara-p04106894.html',img:''}
+
+];
+const $=id=>document.getElementById(id);
+const ENDPOINT='https://atelier-ai-api.homeroc5679.workers.dev/interpretar';
+const normalize=s=>String(s||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().trim().replace(/\s+/g,' ');
+const money=n=>new Intl.NumberFormat('es-MX',{style:'currency',currency:'MXN',maximumFractionDigits:0}).format(n);
+const safe=s=>String(s??'').slice(0,220);
+const clone=()=>JSON.parse(JSON.stringify(outfit));
+let outfit=[],undoStack=[],editing=null,busy=false;
+function status(t){$('status').textContent=t}
+function setBusy(b){busy=b;$('search').disabled=b;$('apply').disabled=b;$('search').textContent=b?'Consultando Gemini…':'Buscar outfit';$('apply').textContent=b?'Aplicando…':'Aplicar cambio'}
+function budget(){const n=Number($('budget').value);return Number.isFinite(n)&&n>0?n:0}
+function keep(){undoStack.push(clone());if(undoStack.length>20)undoStack.shift()}
+function item(raw,old=null){
+  const type=safe(raw?.tipo||old?.tipo||'').trim(),color=safe(raw?.color??old?.color??'').trim(),fit=safe(raw?.corte??old?.corte??'').trim(),detail=safe(raw?.detalles??old?.detalles??'').trim();
+  if(!type)return null;
+  return {tipo:type,color,corte:fit,detalles:detail,product:null};
+}
+function title(s){return [s.tipo,s.color,s.corte,s.detalles].filter(Boolean).join(' · ')}
+// Las equivalencias son exclusivamente de nombres de catálogo, no una lista cerrada para Gemini.
+function productType(p){return ({pantalon:'pantalón',zapatos:'zapatos',camisa:'camisa',saco:'saco'})[p.type]||p.type}
+function sameKind(a,b){const x=normalize(a),y=normalize(b);const eq=[['pantalon','pantalones'],['zapato','zapatos']];if(x===y)return true;return eq.some(g=>g.includes(x)&&g.includes(y))}
+function strictMatch(s,p){
+  const t=normalize(s.tipo),pt=normalize(productType(p));
+  if(!sameKind(t,pt))return false;
+  if(s.color && normalize(s.color)!==normalize(p.color))return false;
+  if(s.corte && normalize(s.corte)!==normalize(p.fit))return false;
+  // El catálogo no guarda materiales y detalles. No afirmamos que cumpla atributos sin verificar.
+  if(s.detalles)return false;
+  return true;
+}
+function choices(s){return catalog.filter(p=>strictMatch(s,p)).sort((a,b)=>a.price-b.price)}
+function reconcile(items){
+  let available=budget(),sum=0;
+  const out=items.map(s=>({...s,product:null}));
+  // Prioriza colocar más piezas confirmadas dentro del presupuesto, sin inventar sustituciones.
+  const opts=out.map(s=>choices(s));
+  let combos=[{sum:0,ids:[],n:0}];
+  for(let i=0;i<opts.length;i++){
+    const next=[];
+    for(const c of combos){next.push({...c,ids:[...c.ids,null]});for(const p of opts[i])if(c.sum+p.price<=available)next.push({sum:c.sum+p.price,ids:[...c.ids,p],n:c.n+1})}
+    combos=next.sort((a,b)=>b.n-a.n||a.sum-b.sum).slice(0,600);
+  }
+  const winner=combos.sort((a,b)=>b.n-a.n||a.sum-b.sum)[0];
+  out.forEach((s,i)=>s.product=winner?.ids[i]||null);return out;
+}
+function shopping(s){return 'https://www.google.com/search?tbm=shop&q='+encodeURIComponent(title(s)+' ropa comprar México')}
+function button(text,fn,cls='alt small'){const b=document.createElement('button');b.textContent=text;b.className=cls;b.addEventListener('click',fn);return b}
+function anchor(text,link){const a=document.createElement('a');a.className='button small';a.textContent=text;a.href=link;a.rel='noopener noreferrer';a.target='_blank';return a}
+function render(){
+  const root=$('cards');root.replaceChildren();let total=0,missing=0;
+  for(let i=0;i<outfit.length;i++){
+    const s=outfit[i],p=s.product,card=document.createElement('article');card.className='card';const photo=document.createElement('div');photo.className='photo';photo.textContent=p?'Fotografía disponible en tienda':'Sin producto verificado para esta solicitud';
+    if(p?.img){const img=document.createElement('img');img.src=p.img;img.alt=p.name;img.loading='lazy';img.onerror=()=>img.remove();photo.replaceChildren(img)}
+    card.append(photo);const body=document.createElement('div');body.className='body';const h=document.createElement('h3');h.textContent=title(s);body.append(h);
+    const subtitle=document.createElement('div');subtitle.className='tag';subtitle.textContent=p?p.store+' · '+p.name:'BUSQUEDA PENDIENTE';body.append(subtitle);
+    const price=document.createElement('div');price.className='price';price.textContent=p?money(p.price):'Sin precio confirmado';body.append(price);
+    if(p)total+=p.price;else missing++;
+    const row=document.createElement('div');row.className='buttons';row.append(anchor(p?'Ver en tienda ↗':'Buscar en tiendas ↗',p?p.url:shopping(s)));row.append(button('Modificar solo esta prenda',()=>openEditor(i)));body.append(row);
+    const options=choices(s).filter(x=>x.id!==p?.id).slice(0,4);
+    if(options.length){const hd=document.createElement('p');hd.className='tip';hd.textContent='Otras fichas que coinciden:';body.append(hd);for(const opt of options){const div=document.createElement('div');div.className='alternative';const t=document.createElement('div');t.textContent=opt.store+' · '+opt.name+' · '+money(opt.price);div.append(t);div.append(anchor('Ver ficha ↗',opt.url));div.append(document.createTextNode(' '));div.append(button('Elegir esta',()=>{
+      const other=outfit.reduce((n,v,j)=>n+(j!==i?v.product?.price||0:0),0);
+      if(other+opt.price>budget()){status('Esta opción excede el presupuesto.');return}
+      keep();outfit[i].product=opt;status('Se reemplazó únicamente esta ficha.');render();
+    }));body.append(div)}}card.append(body);root.append(card)
+  }
+  $('total').textContent=outfit.length?money(total)+(missing?' + '+missing+' sin precio':''):'—';
+  $('budgetState').textContent=outfit.length?(missing?'Faltan '+missing+' prendas por confirmar. El presupuesto final es desconocido.': 'Outfit completo dentro del presupuesto de '+money(budget())+'.'):'';
+  $('undo').disabled=!undoStack.length;$('editAll').disabled=!outfit.length;
+}
+async function askGemini(instruccion,modo){
+  const response=await fetch(ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({modo,instruccion,outfitActual:outfit.map(x=>({tipo:x.tipo,color:x.color||null,corte:x.corte||null,detalles:x.detalles||null}))})});
+  const data=await response.json().catch(()=>({}));if(!response.ok||!data.ok||!data.interpretacion)throw new Error(data.detalle||data.error||'Gemini no respondió.');return data.interpretacion;
+}
+function excluded(s,list){return (list||[]).some(v=>sameKind(s.tipo,v))}
+async function create(){if(busy)return;const text=$('prompt').value.trim();if(!text||!budget()){status('Escribe el outfit y un presupuesto válido.');return}
+  setBusy(true);status('Gemini está interpretando tu solicitud…');try{
+    const ans=await askGemini(text,'crear');if(!Array.isArray(ans.prendas))throw new Error('Gemini no devolvió una lista de prendas.');
+    const next=ans.prendas.map(x=>item(x)).filter(Boolean).filter(x=>!excluded(x,ans.exclusiones));if(!next.length)throw new Error('No se identificaron prendas.');
+    keep();outfit=reconcile(next);render();status('Gemini interpretó '+outfit.length+' prendas. Los productos sin coincidencia registrada se mantienen pendientes.');
+  }catch(e){status('No se pudo interpretar la solicitud: '+e.message+'. No se borró tu outfit anterior.')}finally{setBusy(false)}
+}
+function openEditor(index){editing=index;$('editbox').classList.remove('hidden');$('editTitle').textContent=index===-1?'Modificar outfit completo':'Modificar solo: '+outfit[index].tipo;$('editText').value='';$('editText').focus();$('editbox').scrollIntoView({block:'nearest',behavior:'smooth'})}
+async function apply(){if(busy||editing===null)return;const text=$('editText').value.trim();if(!text){status('Escribe qué deseas modificar.');return}
+  const index=editing,original=index>=0?outfit[index]:null;
+  setBusy(true);status('Gemini está interpretando el cambio…');try{
+    let instruction=text;
+    if(index>=0)instruction=`ACTUALIZACIÓN DE UNA SOLA PRENDA. La prenda elegida es la número ${index+1} del outfit: ${JSON.stringify({tipo:original.tipo,color:original.color,corte:original.corte,detalles:original.detalles})}. Nueva instrucción del usuario: "${text}". Devuelve en prendas EXACTAMENTE UNA entrada que describa el ESTADO FINAL de la prenda elegida. Si quiere cambiar el tipo (por ejemplo camisa por polo), escribe el NUEVO tipo, no el anterior. Si no cambia color/corte conserva los originales. No devuelvas otras prendas.`;
+    const ans=await askGemini(instruction,'modificar');if(!Array.isArray(ans.prendas)||!ans.prendas.length)throw new Error('Gemini no describió el cambio.');
+    if(index>=0){
+      if(ans.prendas.length!==1)throw new Error('La IA devolvió más de una prenda para un cambio individual; no se aplicó para proteger las demás.');
+      const result=item(ans.prendas[0],original);if(!result)throw new Error('No se obtuvo el nuevo tipo de prenda.');
+      // Cada solicitud escrita por el usuario modifica una sola posición; nunca se descartan las otras.
+      const next=clone();next[index]=result;
+      const remaining=next.reduce((sum,x,i)=>sum+(i===index?0:(x.product?.price||0)),0);
+      result.product=choices(result).find(p=>p.price+remaining<=budget())||null;
+      keep();outfit=next;status('✓ Se actualizó únicamente «'+result.tipo+'». '+(result.product?'Se encontró una ficha compatible.':'Sin producto compatible registrado: puedes buscarlo en tiendas.'));
+    }else{
+      // Reinterpretación completa: el usuario pidió expresamente modificar el outfit entero.
+      const updated=ans.prendas.map(x=>item(x)).filter(Boolean).filter(x=>!excluded(x,ans.exclusiones));if(!updated.length)throw new Error('No se obtuvieron prendas para modificar.');
+      keep();outfit=reconcile(updated);status('Se actualizó el outfit completo conforme a la interpretación de Gemini.');
+    }
+    editing=null;$('editbox').classList.add('hidden');render();
+  }catch(e){status('No se aplicó el cambio: '+e.message+' Se conservó tu outfit.')}finally{setBusy(false)}
+}
+$('search').addEventListener('click',create);$('apply').addEventListener('click',apply);$('cancel').addEventListener('click',()=>{$('editbox').classList.add('hidden');editing=null});$('editAll').addEventListener('click',()=>openEditor(-1));$('undo').addEventListener('click',()=>{if(!undoStack.length)return;outfit=undoStack.pop();render();status('Se deshizo el último cambio.')});$('budget').addEventListener('change',()=>{if(!outfit.length)return;keep();outfit=reconcile(outfit);render();status('Se recalculó la selección usando el nuevo presupuesto. Los precios siguen siendo referencias del catálogo.')});/* ATELIER AI 7.1
    Correccion de catalogo y presupuesto.
    Pegar antes de </script> en index.html.
 */
@@ -231,3 +354,4 @@ $('budget').addEventListener('input', () => {
     '. Los precios son referencias y el inventario no esta verificado.'
   );
 });
+</script></body></html>
